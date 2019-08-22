@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "esModuleInterop": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "strict": true,
+    "target": "esnext"
+  },
+  "include": [
+    "src"
+  ]
+}

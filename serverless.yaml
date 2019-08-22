@@ -1,0 +1,29 @@
+service: the-boilerplate
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+plugins:
+  - serverless-offline
+  - serverless-webpack
+  - serverless-prune-plugin
+
+custom:
+  webpack:
+    config: webpack.server.config.js
+    includeModules:
+      forceInclude:
+        - knex
+        - pg
+
+functions:
+  express:
+    handler: src/_server/server.main
+    events:
+      - http:
+          path: /
+          method: any
+      - http:
+          path: /{any+}
+          method: any
