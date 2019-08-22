@@ -18,7 +18,7 @@ custom:
         - pg
 
 functions:
-  express:
+  server:
     handler: src/_server/server.main
     events:
       - http:

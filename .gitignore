@@ -60,6 +60,9 @@ typings/
 # next.js build output
 .next
 
+# serverless
+.serverless
+
 # serverless-webpack
 .webpack/
 
