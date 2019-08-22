@@ -64,3 +64,5 @@ typings/
 .webpack/
 
 dist/
+
+.DS_Store
