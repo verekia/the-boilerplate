@@ -1,24 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "start": "run-p dev:*",
-    "dev:wds": "webpack-dev-server",
-    "dev:sls": "serverless offline -s dev",
-    "dev:static": "http-server public -p 8090",
-    "local-prod": "run-s clean copy-public webpack-app-prod && run-p local-prod:*",
-    "local-prod:sls": "serverless offline -s local-prod",
-    "local-prod:static": "http-server dist -p 8091",
-    "deploy-staging": "run-s clean copy-public webpack-app-prod deploy-staging:*",
-    "deploy-staging:upload-server": "serverless deploy -s staging",
-    "deploy-staging:upload-dist": "aws s3 cp --recursive dist s3://the-boilerplate-staging/static/",
-    "deploy-prod": "run-s clean copy-public webpack-app-prod deploy-prod:*",
-    "deploy-prod:upload-server": "serverless deploy -s prod",
-    "deploy-prod:upload-dist": "aws s3 cp --recursive dist s3://the-boilerplate/static/",
-    "clean": "shx rm -rf dist .webpack",
-    "copy-public": "shx cp -r public dist",
-    "webpack-app-prod": "webpack -p",
-    "lint": "tsc",
-    "test": "jest"
+    "start": "node scripts dev",
+    "local-prod": "node scripts local-prod",
+    "deploy-staging": "node scripts deploy-staging",
+    "deploy-prod": "node scripts deploy-prod",
+    "validate": "node scripts validate"
   },
   "dependencies": {
     "express": "4.17.1",
@@ -40,7 +27,6 @@
     "@types/redux": "^3.6.0",
     "@types/serialize-javascript": "1.5.0",
     "http-server": "0.11.1",
-    "npm-run-all": "4.1.5",
     "serverless": "1.50.0",
     "serverless-offline": "6.0.0-alpha.15",
     "serverless-prune-plugin": "1.4.0",
@@ -51,7 +37,6 @@
     "typescript": "3.5.3",
     "webpack": "4.39.2",
     "webpack-cli": "3.3.7",
-    "webpack-dev-server": "3.8.0",
-    "yarn-or-npm": "3.0.1"
+    "webpack-dev-server": "3.8.0"
   }
 }
