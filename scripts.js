@@ -1,21 +1,14 @@
 require('dotenv/config')
+const { run, runAsync, scripts } = require('@sharyn/run-cmd')
 
-const { run, runSync } = require('./run-cmd')
-
-const { DEV_STATIC_PORT, LOCAL_PROD_STATIC_PORT, STAGING_S3_BUCKET, PROD_S3_BUCKET } = process.env
+const { DEV_STATIC_PORT, LOCAL_PROD_STATIC_PORT, S3_BUCKET_STAGING, S3_BUCKET_PROD } = process.env
 
 const webpackDevServer = 'webpack-dev-server'
-const serverlessDevServer = 'serverless offline -s dev'
-const staticDevServer = `http-server public -p ${DEV_STATIC_PORT}`
+const serverlessOffline = stage => `serverless offline -s ${stage}`
+const staticServer = port => `http-server public -p ${port}`
 
-const serverlessLocalProdServer = 'serverless offline -s local-prod'
-const staticLocalProdServer = `http-server dist -p ${LOCAL_PROD_STATIC_PORT}`
-
-const uploadServerlessStaging = 'serverless deploy -s staging'
-const uploadServerlessProd = 'serverless deploy -s prod'
-
-const uploadDistToS3Staging = `aws s3 cp --recursive dist s3://${STAGING_S3_BUCKET}/static/`
-const uploadDistToS3Prod = `aws s3 cp --recursive dist s3://${PROD_S3_BUCKET}/static/`
+const uploadServerless = stage => `serverless deploy -s ${stage}`
+const uploadDistToS3 = bucket => `aws s3 cp --recursive dist s3://${bucket}/static/`
 
 const clean = 'shx rm -rf dist .webpack'
 const copyPublic = 'shx cp -r public dist'
@@ -26,41 +19,37 @@ const typeCheck = 'tsc --noEmit'
 const test = 'echo TODO test'
 
 const prepareProd = () => {
-  runSync(clean)
-  runSync(copyPublic)
-  runSync(webpackAppProd)
+  run(clean)
+  run(copyPublic)
+  run(webpackAppProd)
 }
 
-const validate = () => {
-  runSync(lint)
-  runSync(typeCheck)
-  runSync(test)
+const checkAll = () => {
+  run(lint)
+  run(typeCheck)
+  run(test)
 }
 
-const scripts = {
+scripts({
   dev: () => {
-    run(webpackDevServer)
-    run(serverlessDevServer)
-    run(staticDevServer)
+    runAsync(webpackDevServer)
+    runAsync(serverlessOffline('dev'))
+    runAsync(staticServer(DEV_STATIC_PORT))
   },
   'local-prod': () => {
     prepareProd()
-    run(serverlessLocalProdServer)
-    run(staticLocalProdServer)
+    runAsync(serverlessOffline('local-prod'))
+    runAsync(staticServer(LOCAL_PROD_STATIC_PORT))
   },
   'deploy-staging': () => {
     prepareProd()
-    runSync(uploadServerlessStaging)
-    runSync(uploadDistToS3Staging)
+    run(uploadServerless('staging'))
+    run(uploadDistToS3(S3_BUCKET_STAGING))
   },
   'deploy-prod': () => {
     prepareProd()
-    runSync(uploadServerlessProd)
-    runSync(uploadDistToS3Prod)
+    run(uploadServerless('prod'))
+    run(uploadDistToS3(S3_BUCKET_PROD))
   },
-  'validate': () => {
-    validate()
-  }
-}
-
-scripts[process.argv[2]]()
+  'check-all': checkAll,
+})
