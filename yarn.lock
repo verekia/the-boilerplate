@@ -418,10 +418,10 @@
   dependencies:
     dotenv "8.1.0"
 
-"@sharyn/prettier@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@sharyn/prettier/-/prettier-1.0.1.tgz#f623e4f964d0589316d1551684bb0ecaad435281"
-  integrity sha512-5B4sePScz9HT62KE5uJxRb7lxCsRKJtv40RlzZRcNZa7AGW+/N++MMbzQ1QRAYLuFu8BanCPZNawUwk9l1CDZQ==
+"@sharyn/prettier@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@sharyn/prettier/-/prettier-1.0.2.tgz#4ef5f9f114e8f4422a17fa4a34c884c8a5694131"
+  integrity sha512-CB2vCpgbHuyGtapRfJx7+xUKk+jMXK8Z6lt8J1GvVZolpNNDqrqMpx8C4pWWVmTaHs1RtsI2/bx3DJxlDt+v5A==
 
 "@sharyn/run-cmd@1.0.1":
   version "1.0.1"

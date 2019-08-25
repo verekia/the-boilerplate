@@ -20,7 +20,7 @@
     "serverless-http": "2.2.0"
   },
   "devDependencies": {
-    "@sharyn/prettier": "1.0.1",
+    "@sharyn/prettier": "1.0.2",
     "@sharyn/run-cmd": "1.0.1",
     "@types/express": "4.17.1",
     "@types/lodash": "4.14.137",
