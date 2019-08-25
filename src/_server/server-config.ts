@@ -1,11 +1,15 @@
-const stage = process.env.STAGE || ''
+import { STAGE, S3_BUCKET_STAGING, S3_BUCKET_PROD } from '@sharyn/env'
 
 export const staticBaseUrl =
-  stage === 'dev'
+  STAGE === 'dev'
     ? 'http://localhost:8090'
-    : stage === 'local-prod'
+    : STAGE === 'local-prod'
     ? 'http://localhost:8091'
-    : `https://${process.env.S3_BUCKET}.s3.amazonaws.com/static`
+    : STAGE === 'staging'
+    ? `https://${S3_BUCKET_STAGING}.s3.amazonaws.com/static`
+    : STAGE === 'prod'
+    ? `https://${S3_BUCKET_PROD}.s3.amazonaws.com/static`
+    : ''
 
 export const bundleUrl =
-  stage === 'dev' ? 'http://localhost:8080/bundle.js' : `${staticBaseUrl}/js/bundle.js`
+  STAGE === 'dev' ? 'http://localhost:8080/bundle.js' : `${staticBaseUrl}/js/bundle.js`

@@ -1,14 +1,20 @@
-require('dotenv/config')
-const { run, runAsync, scripts } = require('@sharyn/run-cmd')
+import {
+  DEV_STATIC_PORT,
+  LOCAL_PROD_STATIC_PORT,
+  S3_BUCKET_STAGING,
+  S3_BUCKET_PROD,
+} from '@sharyn/env'
 
-const { DEV_STATIC_PORT, LOCAL_PROD_STATIC_PORT, S3_BUCKET_STAGING, S3_BUCKET_PROD } = process.env
+import { run, runAsync, scripts } from '@sharyn/run-cmd'
 
 const webpackDevServer = 'webpack-dev-server'
-const serverlessOffline = stage => `serverless offline -s ${stage}`
-const staticServer = port => `http-server public -p ${port}`
+const serverlessOffline = (stage: string) => `serverless offline -s ${stage}`
 
-const uploadServerless = stage => `serverless deploy -s ${stage}`
-const uploadDistToS3 = bucket => `aws s3 cp --recursive dist s3://${bucket}/static/`
+const devStaticServer = `http-server public -p ${DEV_STATIC_PORT}`
+const localProdStaticServer = `http-server dist -p ${LOCAL_PROD_STATIC_PORT}`
+
+const uploadServerless = (stage: string) => `serverless deploy -s ${stage}`
+const uploadDistToS3 = (bucket: string) => `aws s3 cp --recursive dist s3://${bucket}/static/`
 
 const clean = 'shx rm -rf dist .webpack'
 const copyPublic = 'shx cp -r public dist'
@@ -34,12 +40,12 @@ scripts({
   dev: () => {
     runAsync(webpackDevServer)
     runAsync(serverlessOffline('dev'))
-    runAsync(staticServer(DEV_STATIC_PORT))
+    runAsync(devStaticServer)
   },
   'local-prod': () => {
     prepareProd()
     runAsync(serverlessOffline('local-prod'))
-    runAsync(staticServer(LOCAL_PROD_STATIC_PORT))
+    runAsync(localProdStaticServer)
   },
   'deploy-staging': () => {
     prepareProd()
