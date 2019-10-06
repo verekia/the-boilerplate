@@ -1,11 +1,4 @@
-import {
-  DEV_STATIC_PORT,
-  LOCAL_PROD_STATIC_PORT,
-  S3_BUCKET_STAGING,
-  S3_BUCKET_PROD,
-} from '@sharyn/env'
-
-import { run, runAsync, scripts } from '@sharyn/run-cmd'
+import { run, runAsync, scripts } from '@sharyn/scripts'
 
 const webpackDevServer = 'webpack-dev-server'
 const serverlessOffline = (stage: string) => `serverless offline -s ${stage}`
@@ -20,7 +13,7 @@ const clean = 'shx rm -rf dist .webpack'
 const copyPublic = 'shx cp -r public dist'
 const webpackAppProd = 'webpack -p'
 
-const lint = 'echo TODO lint'
+const lint = 'eslint webpack.*'
 const typeCheck = 'tsc --noEmit'
 const test = 'echo TODO test'
 
@@ -46,16 +39,6 @@ scripts({
     prepareProd()
     runAsync(serverlessOffline('local-prod'))
     runAsync(localProdStaticServer)
-  },
-  'deploy-staging': () => {
-    prepareProd()
-    run(uploadServerless('staging'))
-    run(uploadDistToS3(S3_BUCKET_STAGING))
-  },
-  'deploy-prod': () => {
-    prepareProd()
-    run(uploadServerless('prod'))
-    run(uploadDistToS3(S3_BUCKET_PROD))
   },
   'check-all': checkAll,
 })
